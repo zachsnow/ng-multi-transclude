@@ -1,7 +1,7 @@
 # ng-multi-transclude
 
 Richer transclusion for AngularJS; see <http://zachsnow.com/blog/2013/angularjs-multi-transclusion/>
-or check out this [simple demo](http://plnkr.co/edit/kMH2lYJ20LqNjgqwJ6W6?p=preview).
+or check out this [demo](http://plnkr.co/edit/kMH2lYJ20LqNjgqwJ6W6?p=preview).
 
 ## Dependencies
 
@@ -77,4 +77,4 @@ of `ng-button` to include its own hint.
     </div>
 
 To see something like this in action, check out this
-[simple demo](http://plnkr.co/edit/kMH2lYJ20LqNjgqwJ6W6?p=preview).
+[demo](http://plnkr.co/edit/kMH2lYJ20LqNjgqwJ6W6?p=preview).
