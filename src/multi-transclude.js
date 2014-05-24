@@ -9,7 +9,6 @@
     var value;
     var node
     while (element.length) {
-      console.info('searching', element, names, element.data());
       for (var i = 0, ii = names.length; i < ii; i++) {
         if ((value = element.data(names[i])) !== undefined) return value;
       }
@@ -26,7 +25,6 @@
     function(){
       return {
         controller: function(){
-          console.info('multitem')
           this.ngMultiTransclude = null;
         },
         templateUrl: function($element, $attrs){
@@ -39,7 +37,6 @@
     function(){
       return {
         controller: function(){
-          console.info('multicon')
           this.ngMultiTransclude = null;
         }
       };
