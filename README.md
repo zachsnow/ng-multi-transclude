@@ -14,7 +14,7 @@ or check out this [demo](http://plnkr.co/edit/kMH2lYJ20LqNjgqwJ6W6?p=preview).
 2. Add `multi-transclude` as a dependency
 3. Use `ng-multi-transclude` in your templates
 
-## Usage
+## Description
 
 Transclusion in AngularJS allows you to write a directive that is
 parameterized by a block of HTML.  *Multi-transclusion* allows you to
@@ -74,6 +74,60 @@ of `ng-button` to include its own hint.
         When you delete the thing it's gone <i>forever</i>,
         so be extra careful!
       </span>
+    </div>
+
+## Usage
+
+The `multi-transclude` library includes 3 directives: the eponymous
+`ng-multi-transclude`, along with `ng-multi-template` and `ng-multi-transclude-controller`.
+
+The simplest case is when you'd like to define a template (either inline
+in a directive definition, via `template`, or in a `<script />` tag via `templateUrl`)
+that allows multi-transclusion.  Simply define your template thus:
+
+    <script type="text/ng-template" id="some-template">
+      <h1>Some template</h1>
+      <div class="main-content" ng-multi-transclude="some-block"></div>
+      <div class="some-chrome">
+        <div class="secondary-content" ng-multi-transclude="another-block"></div>
+      </div>
+    </script>
+
+When you want to instantiate your template, use the `ng-multi-template` directive:
+
+    <div ng-multi-template="some-template">
+      <div name="some-block">...</div>
+      <div name="another-block">...</div>
+    </div>
+
+Sometimes you'd like to define your own directive that, along with a multi-transclusion
+template, has a fancy link function.  To do that you need to use `ng-multi-transclude-controller`
+to "wrap" all instances of `ng-multi-transclude` in your template:
+
+    app.directive('ngAnotherDirective', function(){
+      return {
+        templateUrl: 'another-template',
+        link: function(scope, element, attrs){
+          // Some fancy logic.
+        }
+      }
+    });
+    
+    <script type="text/ng-template" id="another-template">
+      <h1>Another template</h1>
+      <div ng-multi-transclude-controller>
+        <div class="main-content" ng-multi-transclude="some-block"></div>
+        <div class="some-chrome">
+          <div class="secondary-content" ng-multi-transclude="another-block"></div>
+        </div>
+      </div>
+    </script>
+
+Then you can use your new custom directive as follows:
+
+    <div ng-another-directive>
+      <div name="some-block">...</div>
+      <div name="another-block">...</div>
     </div>
 
 To see something like this in action, check out this
