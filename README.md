@@ -74,7 +74,7 @@ to be arbitrary templates:
       <span ng-multi-transclude="title" class="title"></span>
     </div>
     <div>
-      <i class="hint-icon">
+      <i class="hint-icon"></i>
       <span ng-multi-transclude="hint" class="hint"></span>
     </div>
   </button>
