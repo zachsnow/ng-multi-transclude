@@ -3,7 +3,7 @@
     // If element is the document object work with the html element instead
     // this makes $(document).scope() possible
     if(element[0].nodeType == 9) {
-      element = $('html');
+      element = angular.element('html');
     }
 
     var value;
@@ -17,7 +17,7 @@
       // element as the parent. This enables directives within a Shadow DOM or polyfilled Shadow DOM
       // to lookup parent controllers.
       var node = element[0];
-      element = $(node.parentNode || (node.nodeType == 11 && node.host));
+      element = angular.element(node.parentNode || (node.nodeType == 11 && node.host));
     }
   };
   
@@ -66,19 +66,20 @@
               'No parent directive that defines a multi-transclusion controller found. '
             );
           }
-          
-          // Uses the argument as the `name` attribute directly, but we could
-          // evaluate it or interpolate it or whatever.
-          var selector = '[name="' + attrs.ngMultiTransclude + '"]';
-          
+
           // Replace this element's HTML with the correct
           // part of the clone.
           var attach = function(clone){
-            element.html('');
-            
-            var $part = clone.find(selector).addBack(selector);
-            if($part.length){
-              element.append($part);
+            var el;
+            for(var i = 0; i < clone.length; i++){
+              el = angular.element(clone[i]);
+              
+              // Uses the argument as the `name` attribute directly, but we could
+              // evaluate it or interpolate it or whatever.
+              if(el.attr('name') === attrs.ngMultiTransclude){
+                element.append(el);
+                return;
+              }
             }
           };
           

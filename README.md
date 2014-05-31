@@ -3,6 +3,8 @@
 Richer transclusion for AngularJS; see <http://zachsnow.com/blog/2013/angularjs-multi-transclusion/>
 or check out this [demo](http://plnkr.co/edit/kMH2lYJ20LqNjgqwJ6W6?p=preview).
 
+This is still somewhat of an experiment.
+
 ## Dependencies
 
 1. AngularJS (duh).
@@ -103,7 +105,8 @@ The `multi-transclude` library includes 3 directives: the eponymous
 
 The simplest case is when you'd like to define a template (either inline
 in a directive definition, via `template`, or in a `<script />` tag via `templateUrl`)
-that allows multi-transclusion.  Simply define your template thus:
+that allows multi-transclusion.  Simply define your template thus, naming
+various multi-transclude blocks.
 
 ```html
     <script type="text/ng-template" id="some-template">
@@ -115,7 +118,9 @@ that allows multi-transclusion.  Simply define your template thus:
     </script>
 ```
 
-When you want to instantiate your template, use the `ng-multi-template` directive:
+When you want to instantiate your template, use the `ng-multi-template` directive,
+populating the named blocks.  Note that you *must* declare your block parameters
+as immediate children of the `ng-multi-template` usage.
 
 ```html
   <div ng-multi-template="some-template">
