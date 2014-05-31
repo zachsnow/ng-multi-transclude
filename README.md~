@@ -8,6 +8,7 @@ This is still somewhat of an experiment.
 ## Dependencies
 
 1. AngularJS (duh).
+2. jQuery (not jqLite).
 
 ## Installation
 
