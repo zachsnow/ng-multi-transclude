@@ -48,7 +48,7 @@
           // Ensure we're transcluding or nothing will work.
           if(!transcludeFn){
             throw new Error(
-              'ngMultiTransclude: ' + '
+              'ngMultiTransclude: ' +
               'Illegal use of ngMultiTransclude directive in the template! ' +
               'No parent directive that requires a transclusion found. '
             );
