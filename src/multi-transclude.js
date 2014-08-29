@@ -7,7 +7,7 @@
     }
 
     var value;
-    var node
+    var node;
     while (element.length) {
       for (var i = 0, ii = names.length; i < ii; i++) {
         if ((value = element.data(names[i])) !== undefined) return value;
@@ -16,11 +16,11 @@
       // If dealing with a document fragment node with a host element, and no parent, use the host
       // element as the parent. This enables directives within a Shadow DOM or polyfilled Shadow DOM
       // to lookup parent controllers.
-      var node = element[0];
+      node = element[0];
       element = angular.element(node.parentNode || (node.nodeType == 11 && node.host));
     }
   };
-  
+
   angular.module('multi-transclude', []).directive('ngMultiTemplate', [
     function(){
       return {
@@ -53,13 +53,13 @@
               'No parent directive that requires a transclusion found. '
             );
           }
-          
+
           // Find the controller that wraps related multi-transclusions.
           var ctrl = getInheritedData(element, [
             '$ngMultiTranscludeControllerController',
             '$ngMultiTemplateController'
           ]);
-          
+
           if(!ctrl){
             throw new Error(
               'Illegal use of ngMultiTransclude directive in the template! ' +
@@ -73,7 +73,7 @@
             var el;
             for(var i = 0; i < clone.length; i++){
               el = angular.element(clone[i]);
-              
+
               // Uses the argument as the `name` attribute directly, but we could
               // evaluate it or interpolate it or whatever.
               if(el.attr('name') === attrs.ngMultiTransclude){
@@ -82,7 +82,7 @@
               }
             }
           };
-          
+
           // Only link the clone if we haven't already; store
           // the already-linked clone on the controller so that
           // it can be referenced by all relevant instances of
@@ -94,6 +94,9 @@
             transcludeFn(function(clone){
               ctrl.ngMultiTransclude = clone;
               attach(clone);
+              scope.$on('$destroy', function() {
+                clone.remove();
+              });
             });
           }
         }
