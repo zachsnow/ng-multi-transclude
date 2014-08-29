@@ -1,13 +1,13 @@
 {
   "name": "ng-multi-transclude",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/zachsnow/ng-multi-transclude",
   "authors": [
     "Zach Snow <z@zachsnow.com>"
   ],
   "description": "Richer transclusion for AngularJS",
   "dependencies": {
-    "angular": "1.2.16"
+    "angular": ">=1.2.16"
   },
   "main": "src/multi-transclude.js",
   "keywords": [
