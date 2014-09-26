@@ -87,18 +87,15 @@
           // the already-linked clone on the controller so that
           // it can be referenced by all relevant instances of
           // the `ng-multi-transclude` directive.
-          if(ctrl.ngMultiTransclude){
-            attach(ctrl.ngMultiTransclude);
-          }
-          else {
+          if(!ctrl.ngMultiTransclude) {
             transcludeFn(function(clone){
               ctrl.ngMultiTransclude = clone;
-              attach(clone);
               scope.$on('$destroy', function() {
                 clone.remove();
               });
             });
           }
+          attach(ctrl.ngMultiTransclude);
         }
       };
     }
