@@ -40,15 +40,14 @@
         'that requires a transclusion found.');
     }
 
-    var self = this;
     var _toTransclude = null;
 
     $scope.$on('$destroy', function() {
       _toTransclude.remove();
     });
 
-    // transclude content that matches name into element
-    self.transclude = function(name, element) {
+    // transcludes content that matches name into element
+    this.transclude = function(name, element) {
       for(var i = 0; i < _toTransclude.length; ++i) {
         // uses the argument as the `name` attribute directly, but we could
         // evaluate it or interpolate it or whatever
