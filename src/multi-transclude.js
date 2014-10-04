@@ -49,7 +49,10 @@
     var _toTransclude = null;
 
     $scope.$on('$destroy', function() {
-      _toTransclude.remove();
+      if(_toTransclude) {
+        _toTransclude.remove();
+        _toTransclude = null;
+      }
     });
 
     // transclude content that matches name into element
