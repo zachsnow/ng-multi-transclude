@@ -1,106 +1,90 @@
 (function(){
-  var getInheritedData = function(element, names){
-    // If element is the document object work with the html element instead
-    // this makes $(document).scope() possible
-    if(element[0].nodeType == 9) {
-      element = angular.element('html');
+  var module = angular.module('multi-transclude', []);
+
+  var Ctrl = ['$scope', '$element', '$transclude', function($scope, $element, $transclude){
+    // Ensure we're transcluding or nothing will work.
+    if(!$transclude){
+      throw new Error(
+        'Illegal use of ngMultiTransclude controller. No directive ' +
+        'that requires a transclusion found.'
+      );
     }
 
-    var value;
-    var node;
-    while (element.length) {
-      for (var i = 0, ii = names.length; i < ii; i++) {
-        if ((value = element.data(names[i])) !== undefined) return value;
+    var toTransclude;
+
+    $scope.$on('$destroy', function(){
+      if(toTransclude){
+        toTransclude.remove();
+        toTransclude = null;
       }
+    });
 
-      // If dealing with a document fragment node with a host element, and no parent, use the host
-      // element as the parent. This enables directives within a Shadow DOM or polyfilled Shadow DOM
-      // to lookup parent controllers.
-      node = element[0];
-      element = angular.element(node.parentNode || (node.nodeType == 11 && node.host));
-    }
-  };
-
-  angular.module('multi-transclude', []).directive('ngMultiTemplate', [
-    function(){
-      return {
-        controller: function(){
-          this.ngMultiTransclude = null;
-        },
-        templateUrl: function($element, $attrs){
-          return $attrs.ngMultiTemplate;
-        },
-        transclude: true
-      };
-    }
-  ]).directive('ngMultiTranscludeController', [
-    function(){
-      return {
-        controller: function(){
-          this.ngMultiTransclude = null;
+    // Transclude content that matches name into element.
+    this.transclude = function(name, element){
+      for(var i = 0; i < toTransclude.length; ++i){
+        // Uses the argument as the `name` attribute directly, but we could
+        // evaluate it or interpolate it or whatever.
+        var el = angular.element(toTransclude[i]);
+        if(el.attr('name') === name){
+          element.append(el);
+          return;
         }
-      };
-    }
-  ]).directive('ngMultiTransclude', [
-    function(){
-      return {
-        link: function(scope, element, attrs, unusedCtrls, transcludeFn){
-          // Ensure we're transcluding or nothing will work.
-          if(!transcludeFn){
-            throw new Error(
-              'ngMultiTransclude: ' +
-              'Illegal use of ngMultiTransclude directive in the template! ' +
-              'No parent directive that requires a transclusion found. '
-            );
-          }
+      }
+    };
 
-          // Find the controller that wraps related multi-transclusions.
-          var ctrl = getInheritedData(element, [
-            '$ngMultiTranscludeControllerController',
-            '$ngMultiTemplateController'
-          ]);
+    // There's not a good way to ask Angular to give you the closest
+    // controller from a list of controllers, we get all multi-transclude
+    // controllers and select the one that is the child of the other.
+    this.$element = $element;
+    this.isChildOf = function(otherCtrl){
+      return otherCtrl.$element[0].contains(this.$element[0]);
+    };
 
-          if(!ctrl){
-            throw new Error(
-              'Illegal use of ngMultiTransclude directive in the template! ' +
-              'No parent directive that defines a multi-transclusion controller found. '
-            );
-          }
+    // get content to transclude
+    $transclude(function(clone){
+      toTransclude = clone;
+    });
+  }];
 
-          // Replace this element's HTML with the correct
-          // part of the clone.
-          var attach = function(clone){
-            var el;
-            for(var i = 0; i < clone.length; i++){
-              el = angular.element(clone[i]);
+  module.directive('ngMultiTemplate', function(){
+    return {
+      transclude: true,
+      templateUrl: function(element, attrs){
+        return attrs.ngMultiTemplate;
+      },
+      controller: Ctrl
+    };
+  });
 
-              // Uses the argument as the `name` attribute directly, but we could
-              // evaluate it or interpolate it or whatever.
-              if(el.attr('name') === attrs.ngMultiTransclude){
-                element.append(el);
-                return;
-              }
-            }
-          };
+  module.directive('ngMultiTranscludeController', function(){
+    return {
+      controller: Ctrl
+    };
+  });
 
-          // Only link the clone if we haven't already; store
-          // the already-linked clone on the controller so that
-          // it can be referenced by all relevant instances of
-          // the `ng-multi-transclude` directive.
-          if(ctrl.ngMultiTransclude){
-            attach(ctrl.ngMultiTransclude);
-          }
-          else {
-            transcludeFn(function(clone){
-              ctrl.ngMultiTransclude = clone;
-              attach(clone);
-              scope.$on('$destroy', function() {
-                clone.remove();
-              });
-            });
-          }
+  module.directive('ngMultiTransclude', function(){
+    return {
+      require: ['?^ngMultiTranscludeController', '?^ngMultiTemplate'],
+      link: function(scope, element, attrs, ctrls){
+        // Find the deepest controller (closes to this element).
+        var ctrl1 = ctrls[0];
+        var ctrl2 = ctrls[1];
+        var ctrl;
+        if(ctrl1 && ctrl2){
+          ctrl = ctrl1.isChildOf(ctrl2) ? ctrl1 : ctrl2;
         }
-      };
-    }
-  ]);
+        else {
+          ctrl = ctrl1 || ctrl2;
+        }
+
+        // A multi-transclude parent directive must be present.
+        if(!ctrl){
+          throw new Error('Illegal use of ngMultiTransclude. No wrapping controller.')
+        }
+
+        // Receive transcluded content.
+        ctrl.transclude(attrs.ngMultiTransclude, element);
+      }
+    };
+  });
 })();
