@@ -26,6 +26,7 @@
         // evaluate it or interpolate it or whatever.
         var el = angular.element(toTransclude[i]);
         if(el.attr('name') === name){
+          element.empty();
           element.append(el);
           return;
         }
