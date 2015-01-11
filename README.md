@@ -164,5 +164,17 @@ Then you can use your new custom directive as follows:
   </div>
 ```
 
+You can provide default block content in your template, too; this content will
+be used if there is no matching block passed to the directive:
+
+```html
+    <script type="text/ng-template" id="some-template">
+      <div ng-multi-transclude="required-block"></div>
+      <div ng-multi-transclude="optional-block">
+        And here's some default content.
+      </div>
+    </script>
+```
+
 To see something like this in action, check out this
 [demo](http://plnkr.co/edit/kMH2lYJ20LqNjgqwJ6W6?p=preview).
