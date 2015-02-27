@@ -12,6 +12,17 @@
 
     var toTransclude;
 
+    // A temp container for transclude content so that content will not be detached from page when linked
+    var tempTranscludeContainer = angular.element('<div style="display:none;"></div>');
+    $element.append(tempTranscludeContainer);
+
+    this.postAllChildrenLinked = function(){
+      if(tempTranscludeContainer){
+        tempTranscludeContainer.remove();
+        tempTranscludeContainer = null;
+      }
+    };
+
     $scope.$on('$destroy', function(){
       if(toTransclude){
         toTransclude.remove();
@@ -44,6 +55,7 @@
     // get content to transclude
     $transclude(function(clone){
       toTransclude = clone;
+      tempTranscludeContainer.append(clone);
     });
   }];
 
@@ -53,13 +65,27 @@
       templateUrl: function(element, attrs){
         return attrs.ngMultiTemplate;
       },
-      controller: Ctrl
+      controller: Ctrl,
+      compile: function(){
+        return {
+          post: function postLink(scope, iElement, iAttrs, controller){
+            controller.postAllChildrenLinked();
+          }
+        };
+      }
     };
   });
 
   module.directive('ngMultiTranscludeController', function(){
     return {
-      controller: Ctrl
+      controller: Ctrl,
+      compile: function(){
+        return {
+          post: function postLink(scope, iElement, iAttrs, controller){
+            controller.postAllChildrenLinked();
+          }
+        };
+      }
     };
   });
 
