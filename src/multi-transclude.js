@@ -65,7 +65,14 @@
       templateUrl: function(element, attrs){
         return attrs.ngMultiTemplate;
       },
-      controller: Ctrl
+      controller: Ctrl,
+      compile: function(){
+        return {
+          post: function postLink(scope, iElement, iAttrs, controller){
+            controller.postAllChildrenLinked();
+          }
+        };
+      }
     };
   });
 
