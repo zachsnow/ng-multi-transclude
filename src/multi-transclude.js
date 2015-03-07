@@ -73,7 +73,7 @@
       },
       controller: Ctrl,
       link: function(scope, element, attrs, ctrl){
-        ctrl.transcluded();
+        scope.$evalAsync(ctrl.transcluded);
       }
     };
   });
@@ -82,7 +82,7 @@
     return {
       controller: Ctrl,
       link: function(scope, element, attrs, ctrl){
-        ctrl.transcluded();
+        scope.$evalAsync(ctrl.transcluded);
       }
     };
   });
