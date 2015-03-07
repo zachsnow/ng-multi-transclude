@@ -57,7 +57,8 @@
 
     // Transclude content and keep track of it; be sure to keep it in the DOM
     // by attaching it to `$element`.
-    $transclude(function(clone){
+    var childScope = $scope.$new();
+    $transclude(childScope, function(clone){
       toTransclude = clone;
 
       transcludeContainer.append(clone);
@@ -73,7 +74,7 @@
       },
       controller: Ctrl,
       link: function(scope, element, attrs, ctrl){
-        scope.$evalAsync(ctrl.transcluded);
+        ctrl.transcluded();
       }
     };
   });
@@ -82,7 +83,7 @@
     return {
       controller: Ctrl,
       link: function(scope, element, attrs, ctrl){
-        scope.$evalAsync(ctrl.transcluded);
+        ctrl.transcluded();
       }
     };
   });
