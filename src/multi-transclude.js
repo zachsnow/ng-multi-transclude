@@ -10,14 +10,27 @@
       );
     }
 
-    var toTransclude;
+    // There's not a good way to ask Angular to give you the closest
+    // controller from a list of controllers, we get all multi-transclude
+    // controllers and select the one that is the child of the other.
+    this.$element = $element;
+    this.isChildOf = function(otherCtrl){
+      return otherCtrl.$element[0].contains(this.$element[0]);
+    };
 
+    // Destination for transcluded content.
+    var toTransclude;
     $scope.$on('$destroy', function(){
       if(toTransclude){
         toTransclude.remove();
         toTransclude = null;
       }
     });
+
+    // A temporary container for transcluded content, so that content will not
+    // be detached from the DOM during link. This ensures that controllers and
+    // other data parent nodes are accessible within the transcluded content.
+    var transcludeContainer = angular.element('<div style="display:none;"></div>');
 
     // Transclude content that matches name into element.
     this.transclude = function(name, element){
@@ -33,17 +46,22 @@
       }
     };
 
-    // There's not a good way to ask Angular to give you the closest
-    // controller from a list of controllers, we get all multi-transclude
-    // controllers and select the one that is the child of the other.
-    this.$element = $element;
-    this.isChildOf = function(otherCtrl){
-      return otherCtrl.$element[0].contains(this.$element[0]);
+    // Should be called after all transclusions are complete to clean up the
+    // temporary container.
+    this.transcluded = function(){
+      if(transcludeContainer){
+        transcludeContainer.remove();
+        transcludeContainer = null;
+      }
     };
 
-    // get content to transclude
+    // Transclude content and keep track of it; be sure to keep it in the DOM
+    // by attaching it to `$element`.
     $transclude(function(clone){
       toTransclude = clone;
+
+      transcludeContainer.append(clone);
+      $element.append(transcludeContainer);
     });
   }];
 
@@ -53,13 +71,19 @@
       templateUrl: function(element, attrs){
         return attrs.ngMultiTemplate;
       },
-      controller: Ctrl
+      controller: Ctrl,
+      link: function(scope, element, attrs, ctrl){
+        ctrl.transcluded();
+      }
     };
   });
 
   module.directive('ngMultiTranscludeController', function(){
     return {
-      controller: Ctrl
+      controller: Ctrl,
+      link: function(scope, element, attrs, ctrl){
+        ctrl.transcluded();
+      }
     };
   });
 
