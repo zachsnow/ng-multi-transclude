@@ -57,8 +57,7 @@
 
     // Transclude content and keep track of it; be sure to keep it in the DOM
     // by attaching it to `$element`.
-    var childScope = $scope.$new();
-    $transclude(childScope, function(clone){
+    $transclude(function(clone){
       toTransclude = clone;
 
       transcludeContainer.append(clone);
