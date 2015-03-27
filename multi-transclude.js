@@ -3,7 +3,7 @@
 
   var module = angular.module('multi-transclude', []);
 
-  var Ctrl = /*@ngInject*/ function($scope, $element, $transclude) {
+  var Ctrl = /*@ngInject*/ ['$scope', '$element', '$transclude', function($scope, $element, $transclude) {
     // Ensure we're transcluding or nothing will work.
     if(!$transclude){
       throw new Error(
@@ -65,7 +65,8 @@
       transcludeContainer.append(clone);
       $element.append(transcludeContainer);
     });
-  };
+  }];
+  Ctrl.$inject = ['$scope', '$element', '$transclude'];
 
   module.directive('ngMultiTemplate', function() {
     return {

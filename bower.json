@@ -9,7 +9,10 @@
   "dependencies": {
     "angular": ">=1.3.0"
   },
-  "main": "src/multi-transclude.js",
+  "devDependencies": {
+    "angular-mocks": "~1.3.9"
+  },
+  "main": "multi-transclude.js",
   "keywords": [
     "ng-multi-transclude",
     "multi-transclude"

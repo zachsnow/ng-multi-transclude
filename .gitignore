@@ -1,1 +1,7 @@
 *~
+npm-debug.log
+node_modules
+bower_components
+.tmp
+coverage
+*.tpl.js
