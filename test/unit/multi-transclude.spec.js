@@ -36,6 +36,30 @@
       expect(angular.element(el[0].querySelector('.secondary-content div[name=another-block]')).text()).toBe('Another Block');
     }));
 
+    it('blocks in ifs are a nightmare', inject(function ($compile, $rootScope) {
+      var el = angular.element('<div ng-multi-template="/if-template.html"><div name="some-block">Some Block</div><div name="another-block">Another Block</div>');
+      var containerScope = $rootScope.$new();
+      containerScope.someTest = true;
+      el = $compile(el)(containerScope);
+      var scope = el.scope();
+      scope.$apply();
+
+      expect(angular.element(el[0].querySelector('.main-content div[name=some-block]')).text()).toBe('Some Block');
+      expect(angular.element(el[0].querySelector('.secondary-content div[name=another-block]')).text()).toBe('Another Block');
+
+      containerScope.someTest = false;
+      scope.$apply();
+
+      expect(angular.element(el[0].querySelector('.main-content div[name=some-block]')).text()).toBe('Some Block');
+      expect(angular.element(el[0].querySelector('.secondary-content div[name=another-block]')).text()).toBe('');
+
+      containerScope.someTest = true;
+      scope.$apply();
+
+      expect(angular.element(el[0].querySelector('.main-content div[name=some-block]')).text()).toBe('Some Block');
+      expect(angular.element(el[0].querySelector('.secondary-content div[name=another-block]')).text()).toBe('Another Block');
+    }));
+
     it('can transclude scope values', inject(function ($compile, $rootScope) {
       var el = angular.element('<div ng-multi-template="/some-template.html"><div name="some-block">fu{{foo}}</div><div name="another-block">Eat {{several}}</div>');
       var scope = $rootScope.$new();
