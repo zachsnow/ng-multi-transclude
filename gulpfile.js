@@ -48,21 +48,14 @@
     });
   });
 
-  gulp.task('jshint', ['annotate'], function () {
+  gulp.task('jshint', function () {
     return gulp.src(['.tmp/**/*.js'])
       .pipe($.jshint())
       .pipe($.jshint.reporter('jshint-stylish'))
       .pipe($.jshint.reporter('fail'));
   });
 
-  gulp.task('annotate', function () {
-    return gulp.src(['src/**/*.js', '!src/**/*.spec.js'])
-      .pipe($.ngAnnotate({add:true, remove: true, 'single_quotes': true}))
-      .pipe(gulp.dest('.tmp'))
-      .pipe($.size());
-  });
-
-  gulp.task('compress', ['annotate'], function() {
+  gulp.task('compress', function() {
     return gulp.src(['.tmp/**/*.js'])
       .pipe($.uglify())
       .pipe($.concat('multi-transclude.min.js'))
@@ -70,7 +63,7 @@
       .pipe($.size());
   });
 
-  gulp.task('concat', ['annotate'], function() {
+  gulp.task('concat', function() {
     return gulp.src(['.tmp/**/*.js'])
       .pipe($.concat('multi-transclude.js'))
       .pipe(gulp.dest('./'))
