@@ -73,7 +73,4 @@
   gulp.task('default', ['build']);
 
   gulp.task('build', ['test', 'jshint', 'compress', 'concat']);
-  /*gulp.task('build', function(cb) {
-    runSequence('test', 'jshint', 'concat', 'compress', cb);
-  });*/
 })();
