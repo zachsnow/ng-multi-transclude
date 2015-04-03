@@ -11,7 +11,7 @@ This is still somewhat of an experiment.
 
 ## Installation
 
-* Load `multi-transclude.js`.
+* Load `multi-transclude.min.js` (or `multi-transclude.js` if you prefer).
 
 * Add `multi-transclude` as a dependency to your angular module.
 
@@ -179,3 +179,12 @@ be used if there is no matching block passed to the directive:
 
 To see something like this in action, check out this
 [demo](http://plnkr.co/edit/kMH2lYJ20LqNjgqwJ6W6?p=preview).
+
+## Developing and Testing
+
+The generous @worldspawn wrote a build system and test suite. The test suite is still
+a bit threadbare but it's a start.  To build and run tests:
+
+    $ npm install
+    $ bower install
+    $ gulp
