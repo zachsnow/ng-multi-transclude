@@ -1,7 +1,7 @@
 (function(){
   var module = angular.module('multi-transclude', []);
 
-  var Ctrl = ['$scope', '$element', '$transclude', function($scope, $element, $transclude){
+  var Ctrl = ['$scope', '$element', '$transclude', '$compile', function($scope, $element, $transclude, $compile){
     // Ensure we're transcluding or nothing will work.
     if(!$transclude){
       throw new Error(
@@ -40,7 +40,8 @@
         var el = angular.element(toTransclude[i]);
         if(el.attr('name') === name){
           element.empty();
-          element.append(el);
+          element.append(el.clone());
+          $compile(element.contents())($scope)
           return;
         }
       }
