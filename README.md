@@ -1,5 +1,7 @@
 # ng-multi-transclude
 
+**NOTE:** It looks like [AngularJS 1.5 will make this library obsolete](https://docs.angularjs.org/api/ng/directive/ngTransclude#multi-slot-transclusion). Hurray!
+
 Richer transclusion for AngularJS; see <http://zachsnow.com/blog/2013/angularjs-multi-transclusion/>
 or check out this [demo](http://plnkr.co/edit/kMH2lYJ20LqNjgqwJ6W6?p=preview).
 
