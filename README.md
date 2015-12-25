@@ -138,6 +138,7 @@ to "wrap" all instances of `ng-multi-transclude` in your template:
   app.directive('ngAnotherDirective', function(){
     return {
       templateUrl: 'another-template',
+      transclude: true,
       link: function(scope, element, attrs){
         // Some fancy logic.
       }
