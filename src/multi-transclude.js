@@ -40,7 +40,7 @@
         var el = angular.element(toTransclude[i]);
         if(el.attr('name') === name){
           element.empty();
-          element.append(el);
+          element.append(el.attr('children') ? el.children() : el);
           return;
         }
       }
